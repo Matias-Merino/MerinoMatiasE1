@@ -408,7 +408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1cd2c80056cbc646904bc4376f803eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardSize: {x: 10, y: 15}
+  boardSize: {x: 8, y: 10}
   tilePrefab:
   - {fileID: 1343553949}
   - {fileID: 595633294}

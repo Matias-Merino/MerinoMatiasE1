@@ -39,10 +39,13 @@ namespace E1
             //for para derecha
             for (int xd = tileData.boardPosition.x; xd < boardSize.x; xd++)
             {
+                if(board[xd, tileData.boardPosition.y].GetComponent<voidTile>()) break;
                 if (board[xd, tileData.boardPosition.y] == null) break;
                 if (board[xd, tileData.boardPosition.y].tileIndex != tileData.tileIndex) break;
                 if (board[xd, tileData.boardPosition.y].tileIndex == tileData.tileIndex)
                 {
+                    RemoveYU(xd, tileData.boardPosition.y + 1, tileData);
+                    RemoveYD(xd, tileData.boardPosition.y - 1, tileData);
                     board[xd, tileData.boardPosition.y].DestroyTile();
                 }
             }
@@ -50,37 +53,84 @@ namespace E1
             //for para izquierda 
             for (int xi = tileData.boardPosition.x; xi >= 0; xi--)
             {
+                if(board[xi, tileData.boardPosition.y].GetComponent<voidTile>()) break;
                 if (board[xi, tileData.boardPosition.y] == null) break;
                 if (board[xi, tileData.boardPosition.y].tileIndex != tileData.tileIndex) break;
                 if (board[xi, tileData.boardPosition.y].tileIndex == tileData.tileIndex)
                 {
+                    RemoveYU(xi, tileData.boardPosition.y + 1, tileData);
+                    RemoveYD(xi, tileData.boardPosition.y - 1, tileData);
                     board[xi, tileData.boardPosition.y].DestroyTile();
                 }
             }
-
-            //for para arriba 
-            for (int yu = tileData.boardPosition.y; yu < boardSize.y; yu++)
-            {
-                if (board[tileData.boardPosition.x, yu] == null) break;
-                if (board[tileData.boardPosition.x, yu].tileIndex != tileData.tileIndex) break;
-                if (board[tileData.boardPosition.x, yu].tileIndex == tileData.tileIndex)
-                {
-                    board[tileData.boardPosition.x, yu].DestroyTile();
-                }
-            }
-
-            //for para abajo 
-            for (int yd = tileData.boardPosition.y; yd >= 0; yd--)
-            {
-                if (board[tileData.boardPosition.x, yd] == null) break;
-                if (board[tileData.boardPosition.x, yd].tileIndex != tileData.tileIndex) break;
-                if (board[tileData.boardPosition.x, yd].tileIndex == tileData.tileIndex)
-                {
-                    board[tileData.boardPosition.x, yd].DestroyTile();
-                }
-            }
-            board[tileData.boardPosition.x, tileData.boardPosition.y].DestroyTile();
             isRefilled = true;
+        }
+ 
+        public void RemoveYU(int x, int y, FTileData tileData)
+        {
+            for (int up = y; up < boardSize.y; up++)
+            {
+                if (board[x, up].GetComponent<voidTile>()) break;
+                if (board[x, up].tileIndex == tileData.tileIndex)
+                {
+                    RemoveXD(x + 1, up, tileData);
+                    RemoveXI(x - 1, up, tileData);
+                    board[x, up].DestroyTile();
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        public void RemoveYD(int x, int y, FTileData tileData)
+        {
+            for (int down = y; down >= 0; down--)
+            {
+                if (board[x, down].GetComponent<voidTile>()) break;
+                if (board[x, down].tileIndex == tileData.tileIndex)
+                {
+                    RemoveXD(x + 1, down, tileData);
+                    RemoveXI(x - 1, down, tileData);
+                    board[x, down].DestroyTile();
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        public void RemoveXD(int x, int y, FTileData tileData)
+        {
+            for (int right = x; right < boardSize.x; right++)
+            {
+                if (board[right, y].GetComponent<voidTile>()) break;
+                if (board[right, y].tileIndex == tileData.tileIndex)
+                {
+                    board[right, y].DestroyTile();
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        public void RemoveXI(int x, int y, FTileData tileData)
+        {
+            for (int left = x; left >= 0; left--)
+            {
+                if (board[left, y].GetComponent<voidTile>()) break;
+                if (board[left, y].tileIndex == tileData.tileIndex)
+                {
+                    board[left, y].DestroyTile();
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         void Refill()
@@ -153,8 +203,9 @@ namespace E1
                     {
                         try
                         {
-                                board[x, y].DestroyTile();
-                                isRefilled = true;
+                            if (board[x, y].GetComponent<voidTile>()) continue;
+                            board[x, y].DestroyTile();
+                            isRefilled = true;
                         }
                         catch { }
                     }
@@ -167,6 +218,7 @@ namespace E1
             {
                 try
                 {
+                    if (board[x, tileData.boardPosition.y].GetComponent<voidTile>()) continue;
                     board[x, tileData.boardPosition.y].DestroyTile();
                     isRefilled = true;
                 }
@@ -179,6 +231,7 @@ namespace E1
             {
                 try
                 {
+                    if (board[tileData.boardPosition.x, y].GetComponent<voidTile>()) continue;
                     board[tileData.boardPosition.x, y].DestroyTile();
                     isRefilled = true;
                 }
