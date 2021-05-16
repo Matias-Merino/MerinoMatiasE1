@@ -6,6 +6,7 @@ namespace E1
 {
     public class BoardManager : MonoBehaviour
     {
+        //test
         public Vector2Int boardSize = new Vector2Int(8, 10);
         public GameObject[] tilePrefab;
         public float tileOffSet = 1.4f;
